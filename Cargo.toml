@@ -1,0 +1,23 @@
+[package]
+name = "ironshield-api"
+version = "0.1.0"
+edition = "2021"
+authors = [ "IronShield Developers <software@ironshield.cloud>" ]
+description = "IronShield API Server"
+repository = "https://github.com/IronShield-Tech/IronShield"
+license = "SSPL-1.0"
+readme = "README.md"
+keywords = ["api"]
+categories = ["web-programming"]
+
+[[bin]]
+name = "ironshield-api"
+path = "src/main.rs"
+
+[lib]
+name = "ironshield_api"
+path = "src/lib.rs"
+
+[dependencies]
+axum = "0.8.4"
+tokio = { version = "1", features = ["full"] }
