@@ -1,4 +1,4 @@
-use axum::routing::get;
+use ironshield_api::routing::app;
 
 use std::fs::OpenOptions;
 use std::net::SocketAddr;
@@ -36,10 +36,10 @@ async fn main() {
                 .expect("Failed to write to log file.");
             panic!("Failed to bind to address: {}", e);
         });
-    
+
     writeln!(&mut log_file, "Backend listening on http://{}", addr)
         .expect("Failed to write to log file.");
-    
+
     axum::serve(listener, app)
         .await
         .unwrap_or_else(|e| {
@@ -47,10 +47,4 @@ async fn main() {
                 .expect("Failed to write to log file.");
             panic!("Server error: {}", e);
         });
-}
-
-pub fn app() -> axum::Router {
-    axum::Router::new()
-        .route("/request", get(ironshield_api::handler::request_handler::handle_request()))
-        .route("/response", get(ironshield_api::handler::response_handler::handle_response()))
 }
