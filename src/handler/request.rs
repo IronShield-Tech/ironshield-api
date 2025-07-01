@@ -7,7 +7,7 @@ use axum::{
 };
 use serde_json;
 
-use ironshield_types::{IronShieldChallengeResponse, IronShieldRequest};
+use ironshield_types::{IronShieldChallenge, IronShieldChallengeResponse, IronShieldRequest};
 use crate::handler::error::{
     ErrorHandler, 
     CLOCK_SKEW, 
@@ -15,6 +15,7 @@ use crate::handler::error::{
     MAX_TIME_DIFF_MS
 };
 use crate::handler::result::ResultHandler;
+use
 
 use std::string::ToString;
 
@@ -47,6 +48,9 @@ impl IntoResponse for ErrorHandler {
 pub fn handle_ironshield_request(
     Json(payload): Json<IronShieldRequest>,
 ) -> ResultHandler<Json<IronShieldChallengeResponse>> {
+    // Validate the request.
+    validate_ironshield_request(&payload)?;
+
     // This function will handle incoming requests.
     todo!("Validate the request then process the request and the Ok(Json whatever")
 }
@@ -77,4 +81,16 @@ fn validate_ironshield_request(
     }
     
     Ok(())
+}
+
+async fn generate_challenge_for_request(
+    request: IronShieldRequest
+) -> ResultHandler<IronShieldChallenge> {
+    let random_nonce = ironshield_cloudflare::challenge::generate_random_nonce();
+    let created_time = ironshield_cloudflare::challenge::generate_created_time();
+    let challenge_difficulty = ironshield_cloudflare::constant::CHALLENGE_DIFFICULTY;
+    let challenge_param = IronShieldChallenge::difficulty_to_challenge_param(challenge_difficulty);
+    
+    
+    todo!("Implement actual response creation")
 }

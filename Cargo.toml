@@ -20,6 +20,7 @@ path = "src/lib.rs"
 
 [dependencies]
 ironshield-types = { path = "../ironshield-types", version = "0.1.0" }
+ironshield-cloudflare = { path = "../ironshield-edge/ironshield-cloudflare", version = "0.1.0" }
 axum = "0.8.4"
 tokio = { version = "1", features = ["full"] }
 thiserror = "2.0.12"
