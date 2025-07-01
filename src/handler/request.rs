@@ -7,15 +7,22 @@ use axum::{
 };
 use serde_json;
 
-use ironshield_types::{IronShieldChallenge, IronShieldChallengeResponse, IronShieldRequest};
+use ironshield_types::{
+    IronShieldChallenge, 
+    IronShieldChallengeResponse, 
+    IronShieldRequest
+};
 use crate::handler::error::{
     ErrorHandler, 
     CLOCK_SKEW, 
     INVALID_ENDPOINT, 
     MAX_TIME_DIFF_MS
 };
+use ironshield_cloudflare::{
+    constant, 
+    challenge
+};
 use crate::handler::result::ResultHandler;
-use
 
 use std::string::ToString;
 
@@ -86,9 +93,10 @@ fn validate_ironshield_request(
 async fn generate_challenge_for_request(
     request: IronShieldRequest
 ) -> ResultHandler<IronShieldChallenge> {
-    let random_nonce = ironshield_cloudflare::challenge::generate_random_nonce();
-    let created_time = ironshield_cloudflare::challenge::generate_created_time();
-    let challenge_difficulty = ironshield_cloudflare::constant::CHALLENGE_DIFFICULTY;
+    let random_nonce = challenge::generate_random_nonce();
+    let random_nonce = challenge::generate_random_nonce();
+    let created_time = challenge::generate_created_time();
+    let challenge_difficulty = constant::CHALLENGE_DIFFICULTY;
     let challenge_param = IronShieldChallenge::difficulty_to_challenge_param(challenge_difficulty);
     
     
