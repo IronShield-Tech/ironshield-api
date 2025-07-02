@@ -1,61 +1,37 @@
 //! # Request handler and functions.
 
-use axum::{
-    extract::Json,
-    http::StatusCode,
-    response::{IntoResponse, Response},
-};
-use serde_json;
+use axum::extract::Json;
 
 use ironshield_types::{
+    load_private_key_from_env, 
+    load_public_key_from_env, 
     IronShieldChallenge, 
     IronShieldChallengeResponse, 
     IronShieldRequest
 };
-use crate::handler::error::{
-    ErrorHandler, 
-    CLOCK_SKEW, 
-    INVALID_ENDPOINT, 
-    MAX_TIME_DIFF_MS
+use crate::handler::{
+    error::{
+        ErrorHandler, 
+        CLOCK_SKEW, 
+        INVALID_ENDPOINT, 
+        MAX_TIME_DIFF_MS, 
+        PUB_KEY_FAIL, 
+        SIG_KEY_FAIL
+    },
+    result::ResultHandler
 };
-use crate::handler::result::ResultHandler;
 
 use std::string::ToString;
 
-impl IntoResponse for ErrorHandler {
-    fn into_response(self) -> Response {
-        let (status, error_message) = match self {
-            ErrorHandler::InvalidRequest(message) => {
-                (StatusCode::BAD_REQUEST, message)
-            },
-            ErrorHandler::ProcessingError(message) => {
-                (StatusCode::UNPROCESSABLE_ENTITY, message)
-            },
-            ErrorHandler::SerializationError(_) => {
-                (StatusCode::INTERNAL_SERVER_ERROR, "Data processing error".to_string())
-            },
-            ErrorHandler::InternalError => {
-                (StatusCode::INTERNAL_SERVER_ERROR, "Internal server error".to_string())
-            }
-        };
-        
-        let body = Json(serde_json::json!({
-            "error": error_message,
-            "success": false,
-        }));
-
-        (status, body).into_response()
-    }
-}
-
-pub fn handle_ironshield_request(
+pub async fn handle_ironshield_request(
     Json(payload): Json<IronShieldRequest>,
 ) -> ResultHandler<Json<IronShieldChallengeResponse>> {
     // Validate the request.
     validate_ironshield_request(&payload)?;
+    
+    let challenge = generate_challenge_for_request(payload).await?;
 
-    // This function will handle incoming requests.
-    todo!("Validate the request then process the request and the Ok(Json whatever")
+    todo!("impl")
 }
 
 async fn process_ironshield_request(
@@ -89,10 +65,25 @@ fn validate_ironshield_request(
 async fn generate_challenge_for_request(
     request: IronShieldRequest
 ) -> ResultHandler<IronShieldChallenge> {
-    let random_nonce = IronShieldChallenge::generate_random_nonce();
-    let created_time = IronShieldChallenge::generate_created_time();
+    // Load the signing key from the env var.
+    let signing_key = load_private_key_from_env()
+        .map_err(|e| ErrorHandler::ProcessingError(format!("{}: {}", SIG_KEY_FAIL, e)))?;
+    
+    // Load the public key from the env var.
+    let public_key = load_public_key_from_env()
+        .map_err(|e| ErrorHandler::ProcessingError(format!("{}: {}", PUB_KEY_FAIL, e)))?;
+
     let challenge_param = IronShieldChallenge::difficulty_to_challenge_param(ironshield_types::CHALLENGE_DIFFICULTY);
-
-
-    todo!("Implement actual response creation")
+    
+    let mut challenge = IronShieldChallenge::new(
+        request.endpoint.clone(),
+        challenge_param,
+        signing_key,
+        public_key.to_bytes(),
+    );
+    
+    // Set the challenge properties based on the difficulty.
+    challenge.set_recommended_attempts(ironshield_types::CHALLENGE_DIFFICULTY);
+    
+    Ok(challenge)
 }
