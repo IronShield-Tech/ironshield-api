@@ -89,11 +89,9 @@ fn validate_ironshield_request(
 async fn generate_challenge_for_request(
     request: IronShieldRequest
 ) -> ResultHandler<IronShieldChallenge> {
-//  let random_nonce = challenge::generate_random_nonce();
-//  let random_nonce = challenge::generate_random_nonce();
-//  let created_time = challenge::generate_created_time();
-//  let challenge_difficulty = constant::CHALLENGE_DIFFICULTY;
-//  let challenge_param = IronShieldChallenge::difficulty_to_challenge_param(challenge_difficulty);
+    let random_nonce = IronShieldChallenge::generate_random_nonce();
+    let created_time = IronShieldChallenge::generate_created_time();
+    let challenge_param = IronShieldChallenge::difficulty_to_challenge_param(ironshield_types::CHALLENGE_DIFFICULTY);
 
 
     todo!("Implement actual response creation")
