@@ -22,11 +22,11 @@ use crate::handler::{
 
 use std::string::ToString;
 
-pub async fn handle_ironshield_request(
+pub async fn handle_challenge_request(
     Json(payload): Json<IronShieldRequest>,
 ) -> ResultHandler<Json<IronShieldChallenge>> {
     // Validate the request.
-    validate_ironshield_request(&payload)?;
+    validate_challenge_request(&payload)?;
     
     // Process the request and generate a challenge.
     let challenge = generate_challenge_for_request(payload).await?;
@@ -35,7 +35,7 @@ pub async fn handle_ironshield_request(
     Ok(Json(challenge))
 }
 
-fn validate_ironshield_request(
+fn validate_challenge_request(
     request: &IronShieldRequest
 ) -> ResultHandler<()> {
     let time_diff = (chrono::Utc::now().timestamp_millis() - request.timestamp).abs();
