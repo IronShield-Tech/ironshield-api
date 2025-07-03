@@ -1,4 +1,4 @@
-use axum::{Router, routing::{get, post}};
+use axum::{Router, routing::post};
 
 use crate::handler::{
     request::handle_ironshield_request,
@@ -6,7 +6,7 @@ use crate::handler::{
 };
 
 pub fn app() -> Router {
-    Router::new() 
-//      .route("/request", post(handle_ironshield_request()))
-        .route("/response", get(handle_response()))
+    Router::new()
+        .route("/request", post(handle_ironshield_request))
+        .route("/response", post(handle_response()))
 }

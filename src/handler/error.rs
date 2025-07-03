@@ -9,9 +9,10 @@ use axum::{
 use thiserror::Error;
 
 
-pub const MAX_TIME_DIFF_MS:  i64 = 3 * 10000; // 3 * 10,000 millis = 30 seconds
+pub const MAX_TIME_DIFF_MS:  i64 = 3 * 10000; // 3 * 10,000 milliseconds = 30 seconds
 pub const PUB_KEY_FAIL:     &str = "Failed to load public key.";
 pub const SIG_KEY_FAIL:     &str = "Failed to load signing key.";
+pub const SIGNATURE_FAIL:   &str = "Signature verification failed.";
 pub const INVALID_ENDPOINT: &str = "Endpoint must be a valid HTTPS URL.";
 pub const CLOCK_SKEW:       &str = "Request timestamp does not match the current time";
 
