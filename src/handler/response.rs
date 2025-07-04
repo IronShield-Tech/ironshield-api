@@ -62,7 +62,7 @@ async fn verify_and_generate_token(
     
     let auth_msg = format!(
         "{}|{}",
-        hex::encode(response.challenge_signature),
+        hex::encode(response.solved_challenge.challenge_signature),
         valid_for
     );
     
@@ -71,7 +71,7 @@ async fn verify_and_generate_token(
         .map_err(|e| ErrorHandler::ProcessingError(format!("{}: {}", SIGNATURE_FAIL, e)))?;
     
     let token = IronShieldToken::new(
-        response.challenge_signature,
+        response.solved_challenge.challenge_signature,
         valid_for,
         public_key,
         auth_signature,
