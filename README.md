@@ -3,7 +3,7 @@
     <img src="/.github/assets/ironshield_logo_dark_mode.svg#gh-dark-mode-only" width="320"/>
 
    ## Scraping & DDoS Protection For Everyone
-   [![License: AGPLv3](https://img.shields.io/badge/license-AGPLv3-blue.svg)](https://github.com/IronShield-Tech/ironshield-api/blob/main/LICENSE)
+   [![License: SSPLv1](https://img.shields.io/badge/license-SSPLv1-blue.svg)](https://github.com/IronShield-Tech/ironshield-api/blob/main/LICENSE)
    [![Commercial License Available](https://img.shields.io/badge/commercial%20license-available-orange)](https://github.com/IronShield-Tech/IronShield/blob/main/LICENSE_OVERVIEW.md)
 
    *A stateless scraping & L7 DDoS protection solution optimized for performance, privacy, and accessibility*
