@@ -21,10 +21,12 @@ use crate::handler::{
 };
 
 use std::string::ToString;
+use serde_json::{json, Value};
+use crate::constant;
 
 pub async fn handle_challenge_request(
     Json(payload): Json<IronShieldRequest>,
-) -> ResultHandler<Json<IronShieldChallenge>> {
+) -> ResultHandler<Json<Value>> {
     // Validate the request.
     validate_challenge_request(&payload)?;
     
@@ -32,7 +34,11 @@ pub async fn handle_challenge_request(
     let challenge = generate_challenge_for_request(payload).await?;
 
     // Return the challenge response.
-    Ok(Json(challenge))
+    Ok(Json(json!({
+        "status": constant::STATUS_OK,
+        "message": constant::STATUS_OK_MSG,
+        "challenge": challenge
+    })))
 }
 
 fn validate_challenge_request(
