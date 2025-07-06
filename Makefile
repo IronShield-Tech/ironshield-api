@@ -6,7 +6,7 @@ run-api:
 	@-echo "Server available at http://localhost:$(PORT)"
 	@-echo "CTRL+C to stop the server"
 	@-echo ""
-	cargo run &
+	cargo run
 
 .PHONY: stop-api
 stop-api:
