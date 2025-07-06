@@ -1,0 +1,35 @@
+PORT = 3000
+
+.PHONY: run-api
+run-api:
+	@-echo "Running IronShield API..."
+	@-echo "Server available at http://localhost:$(PORT)"
+	@-echo "CTRL+C to stop the server"
+	@-echo ""
+	cargo run &
+
+.PHONY: stop-api
+stop-api:
+	@-echo "Stopping IronShield API..."
+	@-echo "You may need to kill the process manually if it doesn't stop."
+	@-echo ""
+	@-pkill -f 'cargo run' || true
+
+.PHONY: test-api
+test-api:
+	@-echo "Running IronShield API tests..."
+	@if ! curl -s http://localhost:$(PORT) > /dev/null; then \
+      echo "API Server is NOT running. Start it with: 'make run-api'"; \
+      exit 1; \
+    fi
+    # TODO: Add tests.
+
+.PHONY: check
+check:
+	@-echo "Running cargo check..."
+	cargo check
+
+.PHONY: clean
+clean:
+	@-echo "Running cargo clean..."
+	cargo clean
