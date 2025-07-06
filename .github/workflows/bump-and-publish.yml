@@ -100,10 +100,10 @@ jobs:
           tag_name: v${{ env.NEW_VERSION }}
           name: Release v${{ env.NEW_VERSION }}
           body: |
-            ## ironshield-core v${{ env.NEW_VERSION }}
+            ## ironshield-api v${{ env.NEW_VERSION }}
             
-            📦 **Install**: `cargo add ironshield-core@${{ env.NEW_VERSION }}`  
-            🔗 **Crates.io**: https://crates.io/crates/ironshield-core/${{ env.NEW_VERSION }}
+            📦 **Install**: `cargo add ironshield-api@${{ env.NEW_VERSION }}`  
+            🔗 **Crates.io**: https://crates.io/crates/ironshield-api/${{ env.NEW_VERSION }}
           generate_release_notes: true
           draft: false
           prerelease: false
