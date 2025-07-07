@@ -2,6 +2,7 @@
 
 use axum::extract::Json;
 
+use crate::constant;
 use ironshield_types::{
     load_private_key_from_env, 
     load_public_key_from_env, 
@@ -20,9 +21,12 @@ use crate::handler::{
     result::ResultHandler
 };
 
+use serde_json::{
+    json, 
+    Value
+};
+
 use std::string::ToString;
-use serde_json::{json, Value};
-use crate::constant;
 
 pub async fn handle_challenge_request(
     Json(payload): Json<IronShieldRequest>,
