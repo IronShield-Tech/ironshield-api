@@ -23,6 +23,13 @@ test-api:
       exit 1; \
     fi
     # TODO: Add tests.
+    
+.PHONY: test-request
+test-request:
+	@curl --request POST http://localhost:3000/request \
+	     --header "Content-Type: application/json"     \
+	     --data '{"endpoint": "https://example.com/protected", "timestamp": '$(shell date +%s%3N)'}'
+	@printf "\n"
 
 .PHONY: check
 check:
