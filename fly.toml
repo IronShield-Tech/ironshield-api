@@ -1,0 +1,57 @@
+# fly.toml app configuration file for ironshield-api
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'ironshield-api'
+primary_region = 'ams'  # Amsterdam region
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  # Add any environment variables your Rust API needs here
+  # IRONSHIELD_PRIVATE_KEY and IRONSHIELD_PUBLIC_KEY should be set as secrets
+
+[http_service]
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 1
+  processes = ['app']
+
+  [[http_service.ports]]
+    handlers = ["http"]
+    port = 80
+    force_https = true
+
+  [[http_service.ports]]
+    handlers = ["tls", "http"]
+    port = 443
+
+# Health check configuration
+[checks]
+  [checks.health]
+    grace_period = "10s"
+    interval = "30s"
+    method = "GET"
+    path = "/health"
+    port = 80
+    timeout = "5s"
+    type = "http"
+
+# Configuration for API server
+[scale]
+  count = 1
+  memory_mb = 256
+  max_per_region = 1
+
+# Deployment configuration
+[deploy]
+  strategy = "rolling"
+
+[[vm]]
+  cpu_kind = 'shared'
+  cpus = 1
+  memory_mb = 256
