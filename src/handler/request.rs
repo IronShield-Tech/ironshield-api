@@ -58,7 +58,7 @@ fn validate_challenge_request(
     }
     
     // Validate the request is not in the future or in the past.
-    if time_diff < MAX_TIME_DIFF_MS {
+    if time_diff > MAX_TIME_DIFF_MS {
         return Err(ErrorHandler::InvalidRequest(
             CLOCK_SKEW.to_string(),
         ))

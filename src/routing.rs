@@ -25,7 +25,7 @@ fn create_cors_layer() -> CorsLayer {
 
 pub fn app() -> Router {
     Router::new()
-        .route("/request", get(handle_challenge_request))
+        .route("/request", post(handle_challenge_request))
         .route("/response", post(handle_challenge_response))
         .route("/health", get(health_check))
         .route("/test/request", get(test::endpoint::sample_request))
