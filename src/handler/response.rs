@@ -8,21 +8,26 @@ use ironshield_types::{
     IronShieldChallengeResponse, 
     IronShieldToken
 };
+use crate::constant;
 use crate::handler::{
     error::{
         ErrorHandler,
         PUB_KEY_FAIL,
         SIG_KEY_FAIL,
         INVALID_SOLUTION,
+        SIGNATURE_FAIL
     },
     result::ResultHandler
 };
 
-use crate::handler::error::SIGNATURE_FAIL;
+use serde_json::{
+    json,
+    Value
+};
 
 pub async fn handle_challenge_response(
     Json(payload): Json<IronShieldChallengeResponse>,
-) -> ResultHandler<Json<IronShieldToken>> {
+) -> ResultHandler<Json<Value>> {
     // Validate the challenge response.
     validate_challenge_response(&payload)?;
     
@@ -30,7 +35,11 @@ pub async fn handle_challenge_response(
     let token = verify_and_generate_token(payload).await?;
     
     // Return the authentication token.
-    Ok(Json(token))
+    Ok(Json(json!({
+        "status":  constant::STATUS_OK,
+        "message": constant::STATUS_OK_MSG,
+        "token":   token
+    })))
 }
 
 fn validate_challenge_response(
