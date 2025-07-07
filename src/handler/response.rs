@@ -60,7 +60,7 @@ async fn verify_and_generate_token(
     
     // Allow for one-hour validity for the token.
     let valid_for = chrono::Utc::now().timestamp_millis() + (60 * 60 * 1000);
-    
+
     // Signatures should cover challenge_signature + valid_for
     // to prevent tampering.
     let signing_key = load_private_key_from_env()

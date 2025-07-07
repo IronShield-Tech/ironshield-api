@@ -1,32 +1,38 @@
 //! # Request handler and functions.
 
 use axum::extract::Json;
-
-use crate::constant;
-use ironshield_types::{
-    load_private_key_from_env, 
-    load_public_key_from_env, 
-    IronShieldChallenge,
-    IronShieldRequest,
+use base64::{
+    Engine,
+    engine::general_purpose::STANDARD
 };
+use ed25519_dalek::{
+    SigningKey,
+    VerifyingKey,
+};
+use serde_json::{
+    json,
+    Value
+};
+
+use ironshield_types::{
+//  load_private_key_from_env,
+//  load_public_key_from_env,
+    IronShieldChallenge,
+    IronShieldRequest
+};
+use crate::constant;
 use crate::handler::{
     error::{
         ErrorHandler, 
         CLOCK_SKEW, 
         INVALID_ENDPOINT, 
-        MAX_TIME_DIFF_MS, 
-        PUB_KEY_FAIL, 
-        SIG_KEY_FAIL,
+        MAX_TIME_DIFF_MS,
     },
     result::ResultHandler
 };
 
-use serde_json::{
-    json, 
-    Value
-};
-
 use std::string::ToString;
+use std::env;
 
 pub async fn handle_challenge_request(
     Json(payload): Json<IronShieldRequest>,
@@ -70,13 +76,30 @@ fn validate_challenge_request(
 async fn generate_challenge_for_request(
     request: IronShieldRequest
 ) -> ResultHandler<IronShieldChallenge> {
+
+    // TEMP
+    let (signing_key, verifying_key) = {
+        use rand_core::OsRng;
+
+        let signing_key: SigningKey = SigningKey::generate(&mut OsRng);
+        let verifying_key: VerifyingKey = signing_key.verifying_key();
+
+        let private_key: String = STANDARD.encode(signing_key.to_bytes());
+        let public_key: String = STANDARD.encode(verifying_key.to_bytes());
+
+        env::set_var("IRONSHIELD_PRIVATE_KEY", &private_key);
+        env::set_var("IRONSHIELD_PUBLIC_KEY", &public_key);
+
+        (signing_key, verifying_key)
+    };
+
     // Load the signing key from the env var.
-    let signing_key = load_private_key_from_env()
-        .map_err(|e| ErrorHandler::ProcessingError(format!("{}: {}", SIG_KEY_FAIL, e)))?;
+//  let signing_key = load_private_key_from_env()
+//      .map_err(|e| ErrorHandler::ProcessingError(format!("{}: {}", SIG_KEY_FAIL, e)))?;
     
     // Load the public key from the env var.
-    let public_key = load_public_key_from_env()
-        .map_err(|e| ErrorHandler::ProcessingError(format!("{}: {}", PUB_KEY_FAIL, e)))?;
+//  let public_key = load_public_key_from_env()
+//      .map_err(|e| ErrorHandler::ProcessingError(format!("{}: {}", PUB_KEY_FAIL, e)))?;
 
     let challenge_param = IronShieldChallenge::difficulty_to_challenge_param(ironshield_types::CHALLENGE_DIFFICULTY);
     
@@ -90,7 +113,8 @@ async fn generate_challenge_for_request(
         request.endpoint.clone(),
         challenge_param,
         signing_key,
-        public_key.to_bytes(),
+//      public_key.to_bytes(),
+        verifying_key.to_bytes(),
     );
     
     // Set the challenge properties based on the difficulty.
