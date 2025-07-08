@@ -10,12 +10,11 @@ run-api: stop-api
 
 .PHONY: rebuild-api
 rebuild-api: stop-api
-	@-echo "Rebuilding IronShield API inside Docker (in detached mode)..."
+	@-echo "Rebuilding and running IronShield API inside Docker (in detached mode)..."
 	@-echo "Server available at http://localhost:$(PORT)"
 	@-echo "Use 'make stop-api' to stop the server."
 	@-echo ""
 	@docker-compose up -d --build
-
 
 .PHONY: stop-api
 stop-api:

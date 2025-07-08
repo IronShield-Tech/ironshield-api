@@ -43,7 +43,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     info!("Starting IronShield API Server v{}", env!("CARGO_PKG_VERSION"));
 
     // Build the router from the routing module.
-    let app = app();
+    let app: axum::Router = app();
 
     // Define the address where the server will listen to.
     // In this case, it listens on all interfaces
@@ -58,7 +58,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         panic!("Failed to bind to address {}: {}", addr, e);
     });
     
-    info!("API server listening on http://{}", addr);
+    info!("Axum API Web Server listening on http://{}", addr);
     
     writeln!(&mut log_file, "Backend listening on http://{}", addr)
         .expect("Failed to write to log file.");
