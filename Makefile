@@ -1,18 +1,29 @@
 PORT = 3000
 
 .PHONY: run-api
-run-api:
-	@-echo "Running IronShield API inside Docker..."
+run-api: stop-api
+	@-echo "Running IronShield API inside Docker (in detached mode)..."
 	@-echo "Server available at http://localhost:$(PORT)"
-	@-echo "CTRL+C to stop the server"
+	@-echo "Use 'make stop-api' to stop the server."
+	@-echo ""
+	@docker-compose up -d
+
+.PHONY: rebuild-api
+rebuild-api: stop-api
+	@-echo "Rebuilding IronShield API inside Docker (in detached mode)..."
+	@-echo "Server available at http://localhost:$(PORT)"
+	@-echo "Use 'make stop-api' to stop the server."
 	@-echo ""
 	@docker-compose up -d --build
 
+
 .PHONY: stop-api
 stop-api:
-	@-echo "Stopping IronShield API container..."
+	@-echo "Stopping IronShield API container and freeing port $(PORT)..."
+	@docker-compose down --remove-orphans || true
+	@fuser -k $(PORT)/tcp || true
+	@-echo "Stop command finished."
 	@-echo ""
-	@docker-compose down
 
 .PHONY: test-api
 test-api:
