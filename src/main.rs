@@ -1,4 +1,9 @@
-use ironshield_api::routing::app;
+mod constant;
+mod handler;
+mod routing;
+mod test;
+
+use routing::app;
 
 use tokio::net::TcpListener;
 use tracing::{
@@ -51,7 +56,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let addr: SocketAddr = SocketAddr::from(([0, 0, 0, 0], 3000));
 
     // Create a TCP listener bound to the address.
-    let listener: TcpListener = TcpListener::bind(addr).await.unwrap_or_else(|e| {
+    let listener: TcpListener = TcpListener::bind(addr).await.unwrap_or_else(|e: std::io::Error| {
         error!("Failed to bind to address {}: {}", addr, e);
         writeln!(&mut log_file, "Failed to bind to address {}: {}", addr, e)
             .expect("Failed to write to log file.");
@@ -63,7 +68,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     writeln!(&mut log_file, "Backend listening on http://{}", addr)
         .expect("Failed to write to log file.");
 
-    axum::serve(listener, app).await.unwrap_or_else(|e| {
+    axum::serve(listener, app).await.unwrap_or_else(|e: std::io::Error| {
         error!("server error: {}", e);
         writeln!(&mut log_file, "Server error: {}", e).expect("Failed to write to log file.");
         panic!("Server error: {}", e);

@@ -1,17 +1,25 @@
-# Stage 1: Build with a simple caching strategy
+# Stage 1: Build with dependency caching
 FROM rust:bullseye AS builder
 WORKDIR /app
+
+# Initialize a dummy project to cache dependencies against.
+RUN USER=root cargo init
+
+# We need the lib file for the dummy build step
+RUN touch src/lib.rs
 
 # Copy the dependency manifest
 COPY Cargo.toml ./
 
-# Fetch all dependencies to cache them
-RUN cargo fetch
+# Build and cache the dependencies. This is the slow part that
+# will only run again if Cargo.toml changes.
+RUN cargo build --release
 
-# Copy the rest of your application's source code
+# Now copy your actual application source code.
 COPY . .
 
-# Build the application. This will be faster since dependencies are already downloaded.
+# Build your application. This will be very fast because
+# dependencies are cached and it only rebuilds your code.
 RUN cargo build --release
 
 # Stage 2: Create the final, small image

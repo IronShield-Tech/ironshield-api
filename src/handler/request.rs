@@ -41,7 +41,7 @@ pub async fn handle_challenge_request(
     validate_challenge_request(&payload)?;
     
     // Process the request and generate a challenge.
-    let challenge = generate_challenge_for_request(payload).await?;
+    let challenge: IronShieldChallenge = generate_challenge_for_request(payload).await?;
 
     // Return the challenge response.
     Ok(Json(json!({
