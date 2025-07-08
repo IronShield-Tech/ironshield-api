@@ -2,24 +2,18 @@
 FROM rust:bullseye AS builder
 WORKDIR /app
 
-# Initialize a dummy project to cache dependencies against.
-RUN USER=root cargo init
-
-# We need the lib file for the dummy build step
-RUN touch src/lib.rs
-
-# Copy the dependency manifest
+# Copy the dependency manifest. Cargo will generate a new lock file.
 COPY Cargo.toml ./
 
-# Build and cache the dependencies. This is the slow part that
+# Fetch and cache the dependencies. This is the slow part that
 # will only run again if Cargo.toml changes.
-RUN cargo build --release
+RUN cargo fetch
 
 # Now copy your actual application source code.
 COPY . .
 
 # Build your application. This will be very fast because
-# dependencies are cached and it only rebuilds your code.
+# dependencies are already downloaded.
 RUN cargo build --release
 
 # Stage 2: Create the final, small image

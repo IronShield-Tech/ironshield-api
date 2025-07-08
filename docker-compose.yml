@@ -8,3 +8,5 @@ services:
       - "3000:3000"
     environment:
       - RUST_LOG=info
+      - IRONSHIELD_PRIVATE_KEY
+      - IRONSHIELD_PUBLIC_KEY
