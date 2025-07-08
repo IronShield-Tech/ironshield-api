@@ -2,18 +2,17 @@ PORT = 3000
 
 .PHONY: run-api
 run-api:
-	@-echo "Running IronShield API..."
+	@-echo "Running IronShield API inside Docker..."
 	@-echo "Server available at http://localhost:$(PORT)"
 	@-echo "CTRL+C to stop the server"
 	@-echo ""
-	cargo run
+	@docker-compose up -d --build
 
 .PHONY: stop-api
 stop-api:
-	@-echo "Stopping IronShield API..."
-	@-echo "You may need to kill the process manually if it doesn't stop."
+	@-echo "Stopping IronShield API container..."
 	@-echo ""
-	@-pkill -f 'cargo run' || true
+	@docker-compose down
 
 .PHONY: test-api
 test-api:
