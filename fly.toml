@@ -37,14 +37,13 @@ primary_region = 'ams'  # Amsterdam region
     interval = "30s"
     method = "GET"
     path = "/health"
-    port = 80
     timeout = "5s"
     type = "http"
 
 # Configuration for API server
 [scale]
   count = 1
-  memory_mb = 256
+  memory_mb = 512
   max_per_region = 1
 
 # Deployment configuration
@@ -54,4 +53,4 @@ primary_region = 'ams'  # Amsterdam region
 [[vm]]
   cpu_kind = 'shared'
   cpus = 1
-  memory_mb = 256
+  memory_mb = 512

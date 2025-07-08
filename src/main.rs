@@ -13,11 +13,7 @@ use tracing::{
 };
 use tracing_subscriber::FmtSubscriber;
 
-use std::{
-    fs::OpenOptions,
-    net::SocketAddr,
-    io::Write
-};
+use std::net::SocketAddr;
 
 /// See https://docs.rs/axum/latest/axum/
 #[tokio::main]
@@ -30,47 +26,26 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     
     tracing::subscriber::set_global_default(subscriber)?;
     
-    // Set up a log file for debugging purposes.
-    let mut log_file: std::fs::File = OpenOptions::new()
-        .create(true)
-        .write(true)
-        .append(true)
-        .open("debug_log.txt")
-        .expect("Failed to open log file.");
-
-    // Log the server start time.
-    writeln!(
-        &log_file, 
-        "Server starting at {:?}",
-        std::time::SystemTime::now()
-    ).expect("Failed to write to log file.");
-    
     info!("Starting IronShield API Server v{}", env!("CARGO_PKG_VERSION"));
 
     // Build the router from the routing module.
     let app: axum::Router = app();
 
     // Define the address where the server will listen to.
-    // In this case, it listens on all interfaces
-    // at port 3000.
-    let addr: SocketAddr = SocketAddr::from(([0, 0, 0, 0], 3000));
+    // We bind to the IPv6 "any" address `[::]`, which allows the Fly.io
+    // proxy to connect to the app.
+    let addr: SocketAddr = "[::]:3000".parse().expect("Failed to parse socket address");
 
     // Create a TCP listener bound to the address.
     let listener: TcpListener = TcpListener::bind(addr).await.unwrap_or_else(|e: std::io::Error| {
         error!("Failed to bind to address {}: {}", addr, e);
-        writeln!(&mut log_file, "Failed to bind to address {}: {}", addr, e)
-            .expect("Failed to write to log file.");
         panic!("Failed to bind to address {}: {}", addr, e);
     });
     
     info!("Axum API Web Server listening on http://{}", addr);
     
-    writeln!(&mut log_file, "Backend listening on http://{}", addr)
-        .expect("Failed to write to log file.");
-
     axum::serve(listener, app).await.unwrap_or_else(|e: std::io::Error| {
         error!("server error: {}", e);
-        writeln!(&mut log_file, "Server error: {}", e).expect("Failed to write to log file.");
         panic!("Server error: {}", e);
     });
     
