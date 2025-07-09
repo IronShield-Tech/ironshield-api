@@ -34,7 +34,7 @@ test-api:
     # TODO: Add tests.
     
 .PHONY: test-remote-request
-test-request:
+test-remote-request:
 	@curl --request POST https://api.ironshield.cloud/request \
 	     --header "Content-Type: application/json"     \
 	     --data '{"endpoint": "https://example.com/protected", "timestamp": '$(shell node -e 'console.log(Date.now())')'}'
