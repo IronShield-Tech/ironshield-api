@@ -45,7 +45,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     info!("Axum API Web Server listening on http://{}", addr);
     
     axum::serve(listener, app).await.unwrap_or_else(|e: std::io::Error| {
-        error!("server error: {}", e);
+        error!("Server error: {}", e);
         panic!("Server error: {}", e);
     });
     
