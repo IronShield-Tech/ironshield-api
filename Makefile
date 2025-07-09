@@ -37,7 +37,7 @@ test-api:
 test-request:
 	@curl --request POST http://localhost:3000/request \
 	     --header "Content-Type: application/json"     \
-	     --data '{"endpoint": "https://example.com/protected", "timestamp": '$(shell date +%s%3N)'}'
+	     --data '{"endpoint": "https://example.com/protected", "timestamp": '$(shell node -e 'console.log(Date.now())')'}'
 	@printf "\n"
 
 .PHONY: check
