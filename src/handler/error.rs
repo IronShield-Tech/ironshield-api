@@ -1,3 +1,5 @@
+//! # Error Handling enum and constants. 
+
 use axum::{
     Json,
     http::StatusCode,
@@ -7,7 +9,6 @@ use axum::{
     },
 };
 use thiserror::Error;
-
 
 pub const MAX_TIME_DIFF_MS:  i64 = 3 * 10000; // 3 * 10,000 milliseconds = 30 seconds
 pub const PUB_KEY_FAIL:     &str = "Failed to load public key";
