@@ -1,14 +1,6 @@
 //! # Request handler and functions.
 
 use axum::extract::Json;
-use base64::{
-    Engine,
-    engine::general_purpose::STANDARD
-};
-use ed25519_dalek::{
-    SigningKey,
-    VerifyingKey,
-};
 use serde_json::{
     json,
     Value
@@ -27,14 +19,11 @@ use crate::handler::{
         CLOCK_SKEW, 
         INVALID_ENDPOINT, 
         MAX_TIME_DIFF_MS,
-        SIG_KEY_FAIL,
-        PUB_KEY_FAIL
     },
     result::ResultHandler
 };
 
 use std::string::ToString;
-use std::env;
 
 pub async fn handle_challenge_request(
     Json(payload): Json<IronShieldRequest>,
@@ -107,9 +96,4 @@ async fn generate_challenge_for_request(
     // TODO: Store challenge in a cache for later verification.
     
     Ok(challenge)
-}
-
-#[cfg(test)]
-mod test {
-
 }
