@@ -32,3 +32,4 @@ tracing = "0.1.41"
 rand_core = "0.6.4"
 ed25519-dalek = { version = "2.1", features = ["rand_core"] }
 base64 = "0.22.1"
+reqwest = "0.12.22"
