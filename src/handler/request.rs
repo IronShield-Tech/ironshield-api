@@ -74,8 +74,6 @@ async fn generate_challenge_for_request(
     // Load the public key from the env var.
     let public_key = load_public_key_from_env()
         .map_err(|e| ErrorHandler::ProcessingError(format!("Failed to load public key: {}", e)))?;
-
-    let challenge_param = IronShieldChallenge::difficulty_to_challenge_param(ironshield_types::CHALLENGE_DIFFICULTY);
     
     // Create the challenge using the construction from ironshield-types.
     // This constructor automatically:
@@ -83,15 +81,12 @@ async fn generate_challenge_for_request(
     // - Sets created_time using IronShieldChallenge::generate_created_time().
     // - Sets expiration_time to created_time + 30 seconds.
     // - Signs the challenge with the provided signing key.
-    let mut challenge = IronShieldChallenge::new(
+    let challenge = IronShieldChallenge::new(
         request.endpoint.clone(),
-        challenge_param,
+        ironshield_types::CHALLENGE_DIFFICULTY,
         signing_key,
         public_key.to_bytes(),
     );
-    
-    // Set the challenge properties based on the difficulty.
-    challenge.set_recommended_attempts(ironshield_types::CHALLENGE_DIFFICULTY);
     
     // TODO: Store challenge in a cache for later verification.
     

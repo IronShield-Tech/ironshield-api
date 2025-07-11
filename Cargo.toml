@@ -19,7 +19,7 @@ name = "ironshield_api"
 path = "src/lib.rs"
 
 [dependencies]
-ironshield-types = "0.1"
+ironshield-types = "0.1.30"
 axum = "0.8.4"
 tokio = { version = "1", features = ["full"] }
 thiserror = "2.0.12"
