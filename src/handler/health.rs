@@ -13,10 +13,10 @@ use crate::handler::result::ResultHandler;
 /// 
 /// # Returns:
 /// * `Json<Value>` - A JSON object containing the 
-///                   - health status, 
-///                   - service name, 
-///                   - version,
-///                   - current timestamp.
+///                 - health status, 
+///                 - service name, 
+///                 - version,
+///                 - current timestamp.
 pub async fn health_check() -> ResultHandler<Json<Value>> {
     Ok(Json(json!({
         "status":    constant::STATUS_OK,
