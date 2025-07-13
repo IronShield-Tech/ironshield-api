@@ -4,7 +4,7 @@ use axum::{
     Json,
     http::StatusCode,
     response::{
-        IntoResponse, 
+        IntoResponse,
         Response
     },
 };
@@ -18,6 +18,7 @@ pub const      SIG_KEY_FAIL: &str = "Failed to load signing key";
 pub const    SIGNATURE_FAIL: &str = "Signature verification failed";
 pub const  INVALID_ENDPOINT: &str = "Endpoint must be a valid HTTPS URL";
 pub const        CLOCK_SKEW: &str = "Request timestamp does not match the current time";
+pub const    INVALID_PARAMS: &str = "Invalid challenge parameters";
 pub const  INVALID_SOLUTION: &str = "Invalid solution provided for the challenge";
 
 // Extended error types for projects that reference this API.
