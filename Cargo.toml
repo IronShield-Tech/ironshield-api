@@ -6,7 +6,7 @@ authors = [ "IronShield Developers <software@ironshield.cloud>" ]
 description = "IronShield API Server"
 repository = "https://github.com/IronShield-Tech/IronShield"
 license = "SSPL-1.0"
-readme = "README.md"
+readme = "README-crates.md"
 keywords = ["api"]
 categories = ["web-programming"]
 
