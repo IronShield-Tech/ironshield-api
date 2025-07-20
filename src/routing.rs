@@ -48,10 +48,10 @@ fn create_cors_layer() -> CorsLayer {
 /// * `/test/request`: to `test::endpoint::sample_request`.
 pub fn app() -> Router {
     Router::new()
-        .route(REQUEST_ENDPOINT,     post(handle_challenge_request))
-        .route(RESPONSE_ENDPOINT,    post(handle_challenge_response))
-        .route(HEALTH_ENDPOINT,      get(health_check))
-        .route("/test/request", get(test::endpoint::sample_request))
+        .route(REQUEST_ENDPOINT,  post(handle_challenge_request))
+        .route(RESPONSE_ENDPOINT, post(handle_challenge_response))
+        .route(HEALTH_ENDPOINT,   get(health_check))
+        .route("/test/request",   get(test::endpoint::sample_request))
         
         .layer(create_cors_layer())
 }
