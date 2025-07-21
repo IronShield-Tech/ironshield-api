@@ -163,10 +163,27 @@ jobs:
           body: |
             ## ironshield-api v${{ env.NEW_VERSION }}
             
-            📦 **Install**: `cargo install ironshield-api@${{ env.NEW_VERSION }}`  
+            📦 **Install**: `cargo add ironshield-api@${{ env.NEW_VERSION }}`  
             🔗 **Crates.io**: https://crates.io/crates/ironshield-api/${{ env.NEW_VERSION }}
           generate_release_notes: true
           draft: false
           prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  
+  deploy:
+    name: Deploy to Fly.io
+    needs: [bump-and-publish] # Only deploy to fly after successfully publishing to crates.io
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      
+      - name: Setup Fly.io CLI
+        uses: superfly/flyctl-actions/setup-flyctl@master
+      
+      - name: Deploy to Fly.io
+        run: flyctl deploy --remote-only --app ironshield-api
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }} 
