@@ -53,7 +53,7 @@ jobs:
           RUSTDOCFLAGS: --cfg docsrs
   test:
     runs-on: ${{ matrix.os }}
-    name: Run Tests ${{ matrix.os }}
+    name: Test ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
