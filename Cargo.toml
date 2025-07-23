@@ -20,7 +20,7 @@ path = "src/lib.rs"
 
 [dependencies]
 ironshield-core = { version = "0.3", features = ["parallel"] }
-ironshield-types = { version = "0.1"}
+ironshield-types = { version = "0.2"}
 axum = "0.8.4"
 tokio = { version = "1", features = ["full"] }
 thiserror = "2.0.12"
