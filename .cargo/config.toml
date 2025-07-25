@@ -1,0 +1,4 @@
+# For use cases without a mono-repo workspace for local development
+[patch.crates-io]
+ironshield-core = { path = "../ironshield-core" }
+ironshield-types = { path = "../ironshield-types" }
