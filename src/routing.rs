@@ -20,7 +20,6 @@ use crate::handler::{
     response::handle_challenge_response,
     health::health_check
 };
-use crate::test;
 
 /// Creates a permissive CORS layer for development/testing purposes.
 ///
@@ -51,7 +50,6 @@ pub fn app() -> Router {
         .route(REQUEST_ENDPOINT,  post(handle_challenge_request))
         .route(RESPONSE_ENDPOINT, post(handle_challenge_response))
         .route(HEALTH_ENDPOINT,   get(health_check))
-        .route("/test/request",   get(test::endpoint::sample_request))
         
         .layer(create_cors_layer())
 }

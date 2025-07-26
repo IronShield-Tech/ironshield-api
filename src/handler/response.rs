@@ -9,25 +9,25 @@ use ironshield_types::{
     IronShieldChallengeResponse,
     IronShieldToken
 };
-use crate::constant;
-use crate::handler::{
+use ironshield::{
     error::{
         ErrorHandler,
         CHALLENGE_EXPIRED,
         PUB_KEY_FAIL,
         SIG_KEY_FAIL,
         INVALID_SOLUTION,
+        INVALID_ENDPOINT,
         INVALID_PARAMS,
         SIGNATURE_FAIL
     },
     result::ResultHandler
 };
+use crate::constant;
 
 use serde_json::{
     json,
     Value
 };
-use crate::handler::error::INVALID_ENDPOINT;
 
 pub async fn handle_challenge_response(
     Json(payload): Json<IronShieldChallengeResponse>,

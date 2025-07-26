@@ -7,7 +7,7 @@ use serde_json::{
 };
 
 use crate::constant;
-use crate::handler::result::ResultHandler;
+use ironshield::result::ResultHandler;
 
 /// Health check endpoint.
 /// 
