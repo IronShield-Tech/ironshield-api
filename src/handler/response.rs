@@ -39,7 +39,7 @@ pub async fn handle_challenge_response(
     verify_ironshield_solution(&payload);
 
     // Verify the proof-of-work solution and generate a token.
-    let token = generate_authentication_token(payload).await?;
+    let token: IronShieldToken = generate_authentication_token(payload).await?;
 
     // Return the authentication token.
     Ok(Json(json!({
@@ -75,27 +75,27 @@ async fn generate_authentication_token(
     // TODO: Verify the solution using ironshield-core.
 
     // Allow for one-hour validity for the token.
-    let valid_for = chrono::Utc::now().timestamp_millis() + (60 * 60 * 1000);
+    let valid_for: i64 = chrono::Utc::now().timestamp_millis() + (60 * 60 * 1000);
 
     // Signatures should cover challenge_signature + valid_for
     // to prevent tampering.
-    let signing_key = load_private_key_from_env()
-        .map_err(|e| ErrorHandler::ProcessingError(format!("{}: {}", SIG_KEY_FAIL, e)))?;
-    let public_key = load_public_key_from_env()
-        .map_err(|e| ErrorHandler::ProcessingError(format!("{}: {}", PUB_KEY_FAIL, e)))?
+    let signing_key: ironshield_core::SigningKey = load_private_key_from_env()
+        .map_err(|e: ironshield_core::CryptoError| ErrorHandler::ProcessingError(format!("{}: {}", SIG_KEY_FAIL, e)))?;
+    let public_key: [u8; 32] = load_public_key_from_env()
+        .map_err(|e: ironshield_core::CryptoError| ErrorHandler::ProcessingError(format!("{}: {}", PUB_KEY_FAIL, e)))?
         .to_bytes();
 
-    let auth_msg = format!(
+    let auth_msg: String = format!(
         "{}|{}",
         hex::encode(response.solved_challenge.challenge_signature),
         valid_for
     );
 
     // Signing the authentication message.
-    let auth_signature = ironshield_types::generate_signature(&signing_key, &auth_msg)
-        .map_err(|e| ErrorHandler::ProcessingError(format!("{}: {}", SIGNATURE_FAIL, e)))?;
+    let auth_signature: [u8; 64] = ironshield_types::generate_signature(&signing_key, &auth_msg)
+        .map_err(|e: ironshield_core::CryptoError| ErrorHandler::ProcessingError(format!("{}: {}", SIGNATURE_FAIL, e)))?;
 
-    let token = IronShieldToken::new(
+    let token: IronShieldToken = IronShieldToken::new(
         response.solved_challenge.challenge_signature,
         valid_for,
         public_key,
