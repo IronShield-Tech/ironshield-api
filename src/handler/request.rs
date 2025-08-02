@@ -12,7 +12,7 @@ use ironshield_types::{
     IronShieldChallenge,
     IronShieldRequest
 };
-use ironshield::{
+use ironshield::handler::{
     error::{
         ErrorHandler,
         CLOCK_SKEW,
@@ -36,8 +36,8 @@ pub async fn handle_challenge_request(
 
     // Return the challenge response.
     Ok(Json(json!({
-        "status": constant::STATUS_OK,
-        "message": constant::STATUS_OK_MSG,
+        "status":    constant::STATUS_OK,
+        "message":   constant::STATUS_OK_MSG,
         "challenge": challenge
     })))
 }

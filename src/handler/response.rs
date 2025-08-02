@@ -9,7 +9,7 @@ use ironshield_types::{
     IronShieldChallengeResponse,
     IronShieldToken
 };
-use ironshield::{
+use ironshield::handler::{
     error::{
         ErrorHandler,
         CHALLENGE_EXPIRED,
