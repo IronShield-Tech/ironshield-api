@@ -8,11 +8,13 @@
 
    *A stateless scraping & L7 DDoS protection solution optimized for performance, privacy, and accessibility*
 
-   Built with **Rust compiled**, IronShield integrates seamlessly with numerous CDN's and reverse proxies to provide blazingly fast scraping and DDoS protection. IronShield is open source and **self-hostable**.
+   **Built with Rust**, IronShield integrates seamlessly with numerous CDN's and reverse proxies to provide blazingly fast scraping and DDoS protection. IronShield is open source and **self-hostable**.
+
+   
 
 </div>
 
 <p align="center">
-  IronShield is licensed under the <a href="https://github.com/IronShield-Tech/IronShield/blob/main/LICENSE">SSPL v1.0</a>.  
-  Commercial licenses are available for modified proprietary use cases. See the <a href="https://github.com/IronShield-Tech/IronShield/blob/main/LICENSE_OVERVIEW.md">License Overview</a> for details.
+  IronShield API is licensed under the <a href="https://github.com/IronShield-Tech/IronShield/blob/main/LICENSE">SSPL v1.0</a>.  
+  Commercial licenses are available for modified proprietary use cases. See the <a href="https://github.com/IronShield-Tech/ironshield-api/blob/main/LICENSE_OVERVIEW.md">License Overview</a> for details.
 </p>

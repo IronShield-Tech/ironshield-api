@@ -1,8 +1,3 @@
-# fly.toml app configuration file for ironshield-api
-#
-# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
-#
-
 app = 'ironshield-api'
 primary_region = 'ams'  # Amsterdam region
 
@@ -10,8 +5,7 @@ primary_region = 'ams'  # Amsterdam region
   dockerfile = "Dockerfile"
 
 [env]
-  # Add any environment variables your Rust API needs here
-  # IRONSHIELD_PRIVATE_KEY and IRONSHIELD_PUBLIC_KEY should be set as secrets
+# All environment variables are set as Fly secrets in this instance
 
 [http_service]
   internal_port = 3000
