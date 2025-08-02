@@ -23,7 +23,7 @@ use ironshield::handler::result::ResultHandler;
     responses(
         (status = 200, description = "Health check successful", body = Value)
     ),
-    tag = "health"
+    tag = "Health"
 )]
 pub async fn health_check() -> ResultHandler<Json<Value>> {
     Ok(Json(json!({

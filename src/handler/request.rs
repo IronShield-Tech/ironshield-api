@@ -33,7 +33,7 @@ use std::string::ToString;
         (status = 200, description = "Challenge generated successfully", body = Value),
         (status = 400, description = "Invalid request parameters", body = Value)
     ),
-    tag = "challenges"
+    tag = "Challenge"
 )]
 pub async fn handle_challenge_request(
     Json(payload): Json<IronShieldRequest>,

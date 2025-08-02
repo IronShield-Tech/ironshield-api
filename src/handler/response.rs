@@ -37,7 +37,7 @@ use serde_json::{
         (status = 200, description = "Solution verified and token generated", body = Value),
         (status = 400, description = "Invalid solution or expired challenge", body = Value)
     ),
-    tag = "challenges"
+    tag = "Challenge"
 )]
 pub async fn handle_challenge_response(
     Json(payload): Json<IronShieldChallengeResponse>,

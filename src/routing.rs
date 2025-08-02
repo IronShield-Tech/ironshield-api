@@ -39,14 +39,13 @@ use crate::handler::{
         )
     ),
     tags(
-        (name = "health", description = "Health check endpoints"),
-        (name = "challenges", description = "Challenge generation and verification endpoints")
+        (name = "Health", description = "Health check endpoint"),
+        (name = "Challenge", description = "Challenge generation and verification endpoints")
     ),
     info(
         title = "IronShield API",
-        version = "0.2.4",
-        description = "A stateless scraping & L7 DDoS protection solution optimized for performance, privacy, and accessibility",
-        license(name = "SSPL v1.0", url = "https://github.com/IronShield-Tech/ironshield-api/blob/main/LICENSE")
+        version = env!("CARGO_PKG_VERSION"),
+        description = "A stateless scraping & L7 DDoS protection solution optimized for performance, privacy, and accessibility"
     )
 )]
 struct ApiDoc;
