@@ -25,6 +25,16 @@ use crate::constant;
 
 use std::string::ToString;
 
+#[utoipa::path(
+    post,
+    path = "/request",
+    request_body = IronShieldRequest,
+    responses(
+        (status = 200, description = "Challenge generated successfully", body = Value),
+        (status = 400, description = "Invalid request parameters", body = Value)
+    ),
+    tag = "challenges"
+)]
 pub async fn handle_challenge_request(
     Json(payload): Json<IronShieldRequest>,
 ) -> ResultHandler<Json<Value>> {
