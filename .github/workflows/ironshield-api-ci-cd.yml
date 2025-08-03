@@ -40,7 +40,8 @@ jobs:
       - name: Prepare Cargo.toml for CI
         run: |
           # Remove path dependencies, keeping only version dependencies
-          sed -i 's/, path = "[^"]*"//g' Cargo.toml
+          # Use empty extension for BSD sed (macOS) compatibility
+          sed -i '' 's/, path = "[^"]*"//g' Cargo.toml
           echo "Modified Cargo.toml for CI:"
           cat Cargo.toml
           
@@ -63,7 +64,8 @@ jobs:
       - name: Prepare Cargo.toml for CI
         run: |
           # Remove path dependencies, keeping only version dependencies
-          sed -i 's/, path = "[^"]*"//g' Cargo.toml
+          # Use empty extension for BSD sed (macOS) compatibility
+          sed -i '' 's/, path = "[^"]*"//g' Cargo.toml
           echo "Modified Cargo.toml for CI:"
           cat Cargo.toml
           
@@ -90,7 +92,8 @@ jobs:
       - name: Prepare Cargo.toml for CI
         run: |
           # Remove path dependencies, keeping only version dependencies
-          sed -i 's/, path = "[^"]*"//g' Cargo.toml
+          # Use empty extension for BSD sed (macOS) compatibility
+          sed -i '' 's/, path = "[^"]*"//g' Cargo.toml
           echo "Modified Cargo.toml for CI:"
           cat Cargo.toml
 
@@ -194,7 +197,8 @@ jobs:
       - name: Prepare Cargo.toml for CI
         run: |
           # Remove path dependencies, keeping only version dependencies
-          sed -i 's/, path = "[^"]*"//g' Cargo.toml
+          # Use empty extension for BSD sed (macOS) compatibility
+          sed -i '' 's/, path = "[^"]*"//g' Cargo.toml
           echo "Modified Cargo.toml for CI:"
           cat Cargo.toml
 
