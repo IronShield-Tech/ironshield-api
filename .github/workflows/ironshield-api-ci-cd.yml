@@ -35,6 +35,15 @@ jobs:
           components: clippy
       - name: Cache Cargo dependencies
         uses: Swatinem/rust-cache@v2
+      
+      # Strip path dependencies for CI (use only version dependencies)
+      - name: Prepare Cargo.toml for CI
+        run: |
+          # Remove path dependencies, keeping only version dependencies
+          sed -i 's/, path = "[^"]*"//g' Cargo.toml
+          echo "Modified Cargo.toml for CI:"
+          cat Cargo.toml
+          
       - name: Run clippy action
         uses: clechasseur/rs-clippy-check@v4
   doc:
@@ -49,6 +58,15 @@ jobs:
         uses: dtolnay/rust-toolchain@nightly
       - name: Cache Cargo dependencies
         uses: Swatinem/rust-cache@v2
+        
+      # Strip path dependencies for CI (use only version dependencies)
+      - name: Prepare Cargo.toml for CI
+        run: |
+          # Remove path dependencies, keeping only version dependencies
+          sed -i 's/, path = "[^"]*"//g' Cargo.toml
+          echo "Modified Cargo.toml for CI:"
+          cat Cargo.toml
+          
       - name: Run cargo doc
         run: cargo doc --no-deps --all-features
         env:
@@ -67,6 +85,14 @@ jobs:
 
       - name: Cache Cargo dependencies
         uses: Swatinem/rust-cache@v2
+
+      # Strip path dependencies for CI (use only version dependencies)
+      - name: Prepare Cargo.toml for CI
+        run: |
+          # Remove path dependencies, keeping only version dependencies
+          sed -i 's/, path = "[^"]*"//g' Cargo.toml
+          echo "Modified Cargo.toml for CI:"
+          cat Cargo.toml
 
       - name: Cargo test all features
         run: cargo test --all-features --all-targets
@@ -163,6 +189,14 @@ jobs:
       # Cache Rust dependencies and compilation artifacts
       - name: Cache Rust Dependencies
         uses: Swatinem/rust-cache@v2
+
+      # Strip path dependencies for CI (use only version dependencies)
+      - name: Prepare Cargo.toml for CI
+        run: |
+          # Remove path dependencies, keeping only version dependencies
+          sed -i 's/, path = "[^"]*"//g' Cargo.toml
+          echo "Modified Cargo.toml for CI:"
+          cat Cargo.toml
 
       # Build and verify the package before publishing
       - name: Build Package
