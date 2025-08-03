@@ -38,6 +38,7 @@ jobs:
       
       # Strip path dependencies for CI (use only version dependencies)
       - name: Prepare Cargo.toml for CI
+        shell: bash
         run: |
           # Remove path dependencies, keeping only version dependencies
           sed -i 's/, path = "[^"]*"//g' Cargo.toml
@@ -61,6 +62,7 @@ jobs:
         
       # Strip path dependencies for CI (use only version dependencies)
       - name: Prepare Cargo.toml for CI
+        shell: bash
         run: |
           # Remove path dependencies, keeping only version dependencies
           sed -i 's/, path = "[^"]*"//g' Cargo.toml
@@ -88,6 +90,7 @@ jobs:
 
       # Strip path dependencies for CI (use only version dependencies)
       - name: Prepare Cargo.toml for CI
+        shell: bash
         run: |
           # Remove path dependencies, keeping only version dependencies
           if [[ "$OSTYPE" == "darwin"* ]]; then
@@ -198,6 +201,7 @@ jobs:
 
       # Strip path dependencies for CI (use only version dependencies)
       - name: Prepare Cargo.toml for CI
+        shell: bash
         run: |
           # Remove path dependencies, keeping only version dependencies
           sed -i 's/, path = "[^"]*"//g' Cargo.toml
