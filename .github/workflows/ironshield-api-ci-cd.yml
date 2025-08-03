@@ -237,6 +237,15 @@ jobs:
       - name: Setup Fly.io CLI
         uses: superfly/flyctl-actions/setup-flyctl@master
 
+      # Strip path dependencies for CI (use only version dependencies)
+      - name: Prepare Cargo.toml for CI
+        shell: bash
+        run: |
+          # Remove path dependencies, keeping only version dependencies
+          sed -i 's/, path = "[^"]*"//g' Cargo.toml
+          echo "Modified Cargo.toml for CI:"
+          cat Cargo.toml
+
       - name: Deploy to Fly.io
         run: flyctl deploy --remote-only
         env:
