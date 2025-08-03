@@ -1,6 +1,6 @@
 [package]
 name = "ironshield-api"
-version = "0.2.8"
+version = "0.2.9"
 edition = "2021"
 authors = [ "IronShield Developers <software@ironshield.cloud>" ]
 description = " IronShield Web Server API, Built with Axum "
