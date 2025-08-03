@@ -7,7 +7,24 @@ use serde_json::{
 };
 
 use crate::constant;
-use ironshield::handler::result::ResultHandler;
+use ironshield::handler::{
+    result::ResultHandler,
+    error::STATUS_OK
+};
+
+// Response types for OpenAPI documentation
+#[derive(utoipa::IntoResponses)]
+#[allow(dead_code)]
+enum HealthResponses {
+    /// Health check successful
+    #[response(status = 200)]
+    Success {
+        status: u16,
+        service: String,
+        version: String,
+        timestamp: i64,
+    },
+}
 
 /// Health check endpoint.
 /// 
@@ -20,14 +37,12 @@ use ironshield::handler::result::ResultHandler;
 #[utoipa::path(
     get,
     path = "/health",
-    responses(
-        (status = 200, description = "Health check successful", body = Value)
-    ),
+    responses(HealthResponses),
     tag = "Health"
 )]
 pub async fn health_check() -> ResultHandler<Json<Value>> {
     Ok(Json(json!({
-        "status":    constant::STATUS_OK,
+        "status":    STATUS_OK,
         "service":   constant::SERVICE_NAME,
         "version":   constant::VERSION,
         "timestamp": chrono::Utc::now().timestamp_millis()

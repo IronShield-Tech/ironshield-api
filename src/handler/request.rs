@@ -18,21 +18,40 @@ use ironshield::handler::{
         CLOCK_SKEW,
         INVALID_ENDPOINT,
         MAX_TIME_DIFF_MS,
+        STATUS_OK,
+        STATUS_OK_MSG,
+        CLOCK_SKEW_MSG,
+        INVALID_ENDPOINT_MSG,
     },
     result::ResultHandler
 };
-use crate::constant;
 
 use std::string::ToString;
+
+// Response types for OpenAPI documentation that use actual error constants
+#[derive(utoipa::IntoResponses)]
+#[allow(dead_code)]
+enum RequestResponses {
+    /// Challenge generated successfully  
+    #[response(status = 200)]
+    Success {
+        status: u16,
+        message: String,
+        challenge: ironshield_types::IronShieldChallenge,
+    },
+    /// Invalid request - endpoint must be HTTPS URL
+    #[response(status = 422, description = INVALID_ENDPOINT_MSG)]
+    InvalidEndpoint,
+    /// Invalid request - timestamp outside allowed time window  
+    #[response(status = 400, description = CLOCK_SKEW_MSG)]
+    ClockSkew,
+}
 
 #[utoipa::path(
     post,
     path = "/request",
     request_body = IronShieldRequest,
-    responses(
-        (status = 200, description = "Challenge generated successfully", body = Value),
-        (status = 400, description = "Invalid request parameters", body = Value)
-    ),
+    responses(RequestResponses),
     tag = "Challenge"
 )]
 pub async fn handle_challenge_request(
@@ -46,8 +65,8 @@ pub async fn handle_challenge_request(
 
     // Return the challenge response.
     Ok(Json(json!({
-        "status":    constant::STATUS_OK,
-        "message":   constant::STATUS_OK_MSG,
+        "status":    STATUS_OK,
+        "message":   STATUS_OK_MSG,
         "challenge": challenge
     })))
 }
@@ -78,12 +97,12 @@ async fn generate_challenge_for_request(
     request: IronShieldRequest
 ) -> ResultHandler<IronShieldChallenge> {
     // Load the signing key from the env var.
-    let signing_key = load_private_key_from_env()
-        .map_err(|e| ErrorHandler::ProcessingError(format!("Failed to load signing key: {}", e)))?;
+    let signing_key: ironshield_core::SigningKey = load_private_key_from_env()
+        .map_err(|e: ironshield_types::CryptoError| ErrorHandler::ProcessingError(format!("Failed to load signing key: {}", e)))?;
     
     // Load the public key from the env var.
     let public_key = load_public_key_from_env()
-        .map_err(|e| ErrorHandler::ProcessingError(format!("Failed to load public key: {}", e)))?;
+        .map_err(|e: ironshield_types::CryptoError| ErrorHandler::ProcessingError(format!("Failed to load public key: {}", e)))?;
     
     // Create the challenge using the construction from ironshield-types.
     // This constructor automatically:
@@ -91,7 +110,7 @@ async fn generate_challenge_for_request(
     // - Sets created_time using IronShieldChallenge::generate_created_time().
     // - Sets expiration_time to created_time + 30 seconds.
     // - Signs the challenge with the provided signing key.
-    let challenge = IronShieldChallenge::new(
+    let challenge: IronShieldChallenge = IronShieldChallenge::new(
         request.endpoint.clone(),
         ironshield_types::CHALLENGE_DIFFICULTY,
         signing_key,
