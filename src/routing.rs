@@ -52,20 +52,17 @@ use crate::handler::{
 )]
 struct ApiDoc;
 
-/// Serves the favicon.ico file
+/// Serves the favicon.ico file (embedded at compile time)
 async fn favicon() -> Response<axum::body::Body> {
-    match std::fs::read("assets/favicon.ico") {
-        Ok(favicon_data) => Response::builder()
-            .status(StatusCode::OK)
-            .header(header::CONTENT_TYPE, "image/x-icon")
-            .header(header::CACHE_CONTROL, "public, max-age=86400") // Cache for 1 day
-            .body(axum::body::Body::from(favicon_data))
-            .unwrap(),
-        Err(_) => Response::builder()
-            .status(StatusCode::NOT_FOUND)
-            .body(axum::body::Body::empty())
-            .unwrap()
-    }
+    // Embed the favicon at compile time to ensure it's available in production
+    const FAVICON_DATA: &[u8] = include_bytes!("../assets/favicon.ico");
+    
+    Response::builder()
+        .status(StatusCode::OK)
+        .header(header::CONTENT_TYPE, "image/x-icon")
+        .header(header::CACHE_CONTROL, "public, max-age=86400") // Cache for 1 day
+        .body(axum::body::Body::from(FAVICON_DATA))
+        .unwrap()
 }
 
 /// Serves the OpenAPI JSON specification
