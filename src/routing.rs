@@ -4,13 +4,15 @@ use axum::{
     Router, 
     routing::post,
     routing::get,
+    response::Response,
+    http::{StatusCode, header}
 };
 use tower_http::cors::{
     CorsLayer, 
     Any
 };
 use utoipa::OpenApi;
-use utoipa_swagger_ui::SwaggerUi;
+use serde_json;
 
 use crate::constant::{
     HEALTH_ENDPOINT,
@@ -50,6 +52,118 @@ use crate::handler::{
 )]
 struct ApiDoc;
 
+/// Serves the favicon.ico file
+async fn favicon() -> Response<axum::body::Body> {
+    match std::fs::read("assets/favicon.ico") {
+        Ok(favicon_data) => Response::builder()
+            .status(StatusCode::OK)
+            .header(header::CONTENT_TYPE, "image/x-icon")
+            .header(header::CACHE_CONTROL, "public, max-age=86400") // Cache for 1 day
+            .body(axum::body::Body::from(favicon_data))
+            .unwrap(),
+        Err(_) => Response::builder()
+            .status(StatusCode::NOT_FOUND)
+            .body(axum::body::Body::empty())
+            .unwrap()
+    }
+}
+
+/// Serves the OpenAPI JSON specification
+async fn openapi_json() -> Response<axum::body::Body> {
+    let openapi = ApiDoc::openapi();
+    let json = serde_json::to_string_pretty(&openapi).unwrap();
+    
+    Response::builder()
+        .status(StatusCode::OK)
+        .header(header::CONTENT_TYPE, "application/json")
+        .header(header::CACHE_CONTROL, "public, max-age=300") // Cache for 5 minutes
+        .body(axum::body::Body::from(json))
+        .unwrap()
+}
+
+/// Serves a custom Swagger UI HTML page with IronShield branding
+async fn custom_swagger_ui() -> Response<axum::body::Body> {
+    let html = r#"<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="IronShield RESTAPI Swagger UI" />
+    <title>REST API | IronShield</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5.9.0/swagger-ui.css" />
+    <style>
+        .swagger-ui .info .title {
+            color: #0074E9;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        .swagger-ui .info .description {
+            color: #333;
+        }
+        .swagger-ui .scheme-container {
+            background: linear-gradient(90deg, #0074E9 0%, #9ECDFC 100%);
+            border: none;
+            box-shadow: 0 2px 4px rgba(0,116,233,0.1);
+        }
+        .swagger-ui .topbar {
+            background: linear-gradient(90deg, #0074E9 0%, #9ECDFC 100%);
+            border-bottom: 1px solid #e3e3e3;
+        }
+        .swagger-ui .topbar .download-url-wrapper .download-url-button {
+            background: #0074E9;
+            border-color: #0074E9;
+        }
+        .swagger-ui .btn.authorize {
+            background: #0074E9;
+            border-color: #0074E9;
+        }
+        .swagger-ui .btn.execute {
+            background: #0074E9;
+            border-color: #0074E9;
+        }
+    </style>
+</head>
+<body>
+    <div id="swagger-ui"></div>
+    <script src="https://unpkg.com/swagger-ui-dist@5.9.0/swagger-ui-bundle.js" crossorigin></script>
+    <script src="https://unpkg.com/swagger-ui-dist@5.9.0/swagger-ui-standalone-preset.js" crossorigin></script>
+    <script>
+        window.onload = () => {
+            window.ui = SwaggerUIBundle({
+                url: '/api-docs/openapi.json',
+                dom_id: '#swagger-ui',
+                presets: [
+                    SwaggerUIBundle.presets.apis,
+                    SwaggerUIStandalonePreset
+                ],
+                layout: "StandaloneLayout",
+                deepLinking: true,
+                showExtensions: true,
+                showCommonExtensions: true,
+                tryItOutEnabled: true,
+                filter: true,
+                requestInterceptor: (request) => {
+                    // Add any custom request headers here if needed
+                    return request;
+                },
+                responseInterceptor: (response) => {
+                    // Add any custom response handling here if needed
+                    return response;
+                }
+            });
+        };
+    </script>
+</body>
+</html>"#;
+
+    Response::builder()
+        .status(StatusCode::OK)
+        .header(header::CONTENT_TYPE, "text/html; charset=utf-8")
+        .header(header::CACHE_CONTROL, "public, max-age=300") // Cache for 5 minutes
+        .body(axum::body::Body::from(html))
+        .unwrap()
+}
+
 /// Creates a permissive CORS layer for development/testing purposes.
 ///
 /// This configuration allows:
@@ -78,10 +192,11 @@ pub fn app() -> Router {
         .route(REQUEST_ENDPOINT,  post(handle_challenge_request))
         .route(RESPONSE_ENDPOINT, post(handle_challenge_response))
         .route(HEALTH_ENDPOINT,   get(health_check))
+        .route("/favicon.ico",    get(favicon))
         
-        // Add Swagger UI at root path
-        .merge(SwaggerUi::new("/")
-            .url("/api-docs/openapi.json", ApiDoc::openapi()))
+        // Add custom Swagger UI route and OpenAPI route
+        .route("/", get(custom_swagger_ui))
+        .route("/api-docs/openapi.json", get(openapi_json))
         
         .layer(create_cors_layer())
 }
