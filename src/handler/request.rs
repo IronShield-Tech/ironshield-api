@@ -50,7 +50,13 @@ enum RequestResponses {
 #[utoipa::path(
     post,
     path = "/request",
-    request_body = IronShieldRequest,
+    request_body(
+        content = IronShieldRequest,
+        example = json!({
+            "endpoint": "https://example.com",
+            "timestamp": chrono::Utc::now().timestamp_millis()
+        })
+    ),
     responses(RequestResponses),
     tag = "Challenge"
 )]
