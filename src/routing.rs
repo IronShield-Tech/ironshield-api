@@ -47,7 +47,8 @@ use crate::handler::{
     info(
         title = "IronShield API",
         version = env!("CARGO_PKG_VERSION"),
-        description = "A stateless scraping & L7 DDoS protection solution optimized for performance, privacy, and accessibility"
+        description = "A stateless scraping & L7 DDoS protection solution optimized for performance, privacy, and accessibility",
+        license(name = "", url = "")
     )
 )]
 struct ApiDoc;
