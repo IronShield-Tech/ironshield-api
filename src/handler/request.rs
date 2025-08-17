@@ -50,13 +50,7 @@ enum RequestResponses {
 #[utoipa::path(
     post,
     path = "/request",
-    request_body(
-        content = IronShieldRequest,
-        example = json!({
-            "endpoint": "https://example.com",
-            "timestamp": chrono::Utc::now().timestamp_millis()
-        })
-    ),
+    request_body = IronShieldRequest,
     responses(RequestResponses),
     tag = "Challenge"
 )]
@@ -80,7 +74,7 @@ pub async fn handle_challenge_request(
 fn validate_challenge_request(
     request: &IronShieldRequest
 ) -> ResultHandler<()> {
-    let time_diff = (chrono::Utc::now().timestamp_millis() - request.timestamp).abs();
+    let time_diff: i64 = (chrono::Utc::now().timestamp_millis() - request.timestamp).abs();
     
     // Validate that request url comes from Hypertext Transfer Protocol Secure.
     if !request.endpoint.starts_with("https://") {

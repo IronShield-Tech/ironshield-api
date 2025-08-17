@@ -3,7 +3,7 @@
 use axum::{
     Router, 
     routing::post,
-    routing::get
+    routing::get,
 };
 use tower_http::cors::{
     CorsLayer, 
