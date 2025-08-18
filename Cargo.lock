@@ -914,13 +914,13 @@ dependencies = [
 
 [[package]]
 name = "ironshield"
-version = "0.2.19"
+version = "0.2.20"
 dependencies = [
  "axum",
  "futures",
  "http",
- "ironshield-core 0.3.13 (registry+https://github.com/rust-lang/crates.io-index)",
- "ironshield-types 0.2.8",
+ "ironshield-core",
+ "ironshield-types",
  "num_cpus",
  "reqwest",
  "serde",
@@ -931,14 +931,14 @@ dependencies = [
 
 [[package]]
 name = "ironshield-api"
-version = "0.2.16"
+version = "0.2.17"
 dependencies = [
  "axum",
  "chrono",
  "hex",
  "ironshield",
- "ironshield-core 0.3.13",
- "ironshield-types 0.2.7",
+ "ironshield-core",
+ "ironshield-types",
  "serde_json",
  "tokio",
  "tower-http",
@@ -950,31 +950,12 @@ dependencies = [
 
 [[package]]
 name = "ironshield-core"
-version = "0.3.13"
+version = "0.3.14"
 dependencies = [
  "base64",
  "chrono",
  "hex",
- "ironshield-types 0.2.8",
- "rand",
- "rayon",
- "serde",
- "serde-wasm-bindgen",
- "serde_json",
- "sha2",
- "wasm-bindgen",
-]
-
-[[package]]
-name = "ironshield-core"
-version = "0.3.13"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2391996219aa88ce9855efba0616269ef61c5e9f45c4ec40e764ab6dff45fb27"
-dependencies = [
- "base64",
- "chrono",
- "hex",
- "ironshield-types 0.2.8",
+ "ironshield-types",
  "rand",
  "rayon",
  "serde",
@@ -986,7 +967,7 @@ dependencies = [
 
 [[package]]
 name = "ironshield-types"
-version = "0.2.7"
+version = "0.2.9"
 dependencies = [
  "base64",
  "chrono",
@@ -997,23 +978,6 @@ dependencies = [
  "serde-wasm-bindgen",
  "serde_json",
  "utoipa",
- "wasm-bindgen",
-]
-
-[[package]]
-name = "ironshield-types"
-version = "0.2.8"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d44b64ce71d0380de20b360b0400014f970b2cca58ac8b5b959242c3f26ed42b"
-dependencies = [
- "base64",
- "chrono",
- "ed25519-dalek",
- "hex",
- "rand",
- "serde",
- "serde-wasm-bindgen",
- "serde_json",
  "wasm-bindgen",
 ]
 
