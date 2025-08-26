@@ -19,8 +19,8 @@ name = "ironshield_api"
 path = "src/lib.rs"
 
 [dependencies]
-ironshield = { version = "0.2", path = "../ironshield-rs", features = ["parallel"] }
-ironshield-core = { version = "0.3", path = "../core", features = ["parallel"] }
+ironshield = { version = "0.2", path = "../ironshield-rs" }
+ironshield-core = { version = "0.3", path = "../core" }
 ironshield-types = { version = "0.2", path = "../types", features = ["openapi"] }
 axum = "0.8.4"
 tokio = { version = "1", features = ["full"] }
