@@ -902,7 +902,7 @@ dependencies = [
 
 [[package]]
 name = "ironshield-api"
-version = "0.2.19"
+version = "0.2.20"
 dependencies = [
  "axum",
  "chrono",
@@ -921,18 +921,15 @@ dependencies = [
 
 [[package]]
 name = "ironshield-core"
-version = "0.3.18"
+version = "0.3.21"
 dependencies = [
  "base64",
  "chrono",
  "hex",
  "ironshield-types",
- "rand",
  "serde",
- "serde-wasm-bindgen",
  "serde_json",
  "sha2",
- "wasm-bindgen",
 ]
 
 [[package]]
@@ -945,10 +942,8 @@ dependencies = [
  "hex",
  "rand",
  "serde",
- "serde-wasm-bindgen",
  "serde_json",
  "utoipa",
- "wasm-bindgen",
 ]
 
 [[package]]
@@ -1566,17 +1561,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "serde-wasm-bindgen"
-version = "0.6.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8302e169f0eddcc139c70f139d19d6467353af16f9fce27e8c30158036a1e16b"
-dependencies = [
- "js-sys",
- "serde",
- "wasm-bindgen",
-]
-
-[[package]]
 name = "serde_derive"
 version = "1.0.219"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2138,8 +2122,6 @@ dependencies = [
  "cfg-if",
  "once_cell",
  "rustversion",
- "serde",
- "serde_json",
  "wasm-bindgen-macro",
 ]
 

@@ -3,3 +3,4 @@ pub const                 SERVICE_NAME: &str = "ironshield-api";
 pub const              HEALTH_ENDPOINT: &str = "/health";
 pub const             REQUEST_ENDPOINT: &str = "/request";
 pub const            RESPONSE_ENDPOINT: &str = "/response";
+pub const         CHALLENGE_DIFFICULTY: u64 = 5_000_000;

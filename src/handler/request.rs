@@ -1,5 +1,5 @@
 //! # Request handler and functions.
-
+use crate::constant::CHALLENGE_DIFFICULTY;
 use axum::extract::Json;
 use serde_json::{
     json,
@@ -112,7 +112,7 @@ async fn generate_challenge_for_request(
     // - Signs the challenge with the provided signing key.
     let challenge: IronShieldChallenge = IronShieldChallenge::new(
         request.endpoint.clone(),
-        ironshield_types::CHALLENGE_DIFFICULTY,
+        CHALLENGE_DIFFICULTY,
         signing_key,
         public_key.to_bytes(),
     );
